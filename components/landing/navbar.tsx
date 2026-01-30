@@ -33,8 +33,8 @@ export function Navbar() {
             >
                 <div
                     className={`transition-all duration-300 relative flex items-center justify-between px-6 ${isScrolled
-                            ? "w-[90%] md:w-[80%] max-w-5xl rounded-full bg-background/60 backdrop-blur-xl border border-white/10 shadow-2xl shadow-indigo-500/10 py-3"
-                            : "w-full bg-transparent py-6 container mx-auto"
+                        ? "w-[90%] md:w-[80%] max-w-5xl rounded-full bg-background/60 backdrop-blur-xl border border-white/10 shadow-2xl shadow-indigo-500/10 py-3"
+                        : "w-full bg-transparent py-6 container mx-auto"
                         }`}
                 >
                     {/* Logo */}
@@ -68,15 +68,19 @@ export function Navbar() {
                     </div>
 
                     <div className="hidden md:flex items-center gap-4 z-10">
-                        <Button variant="ghost" className="text-sm font-medium hover:bg-transparent hover:text-primary">
-                            Sign In
-                        </Button>
-                        <Button className="rounded-full px-6 bg-primary hover:bg-primary/90 text-primary-foreground border-0 shadow-lg shadow-indigo-500/25 relative overflow-hidden group">
-                            <span className="relative z-10 flex items-center gap-2">
-                                Get Started <Sparkles size={14} />
-                            </span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
-                        </Button>
+                        <Link href="/login">
+                            <Button variant="ghost" className="text-sm font-medium hover:bg-transparent hover:text-primary">
+                                Sign In
+                            </Button>
+                        </Link>
+                        <Link href="/login">
+                            <Button className="rounded-full px-6 bg-primary hover:bg-primary/90 text-primary-foreground border-0 shadow-lg shadow-indigo-500/25 relative overflow-hidden group">
+                                <span className="relative z-10 flex items-center gap-2">
+                                    Get Started <Sparkles size={14} />
+                                </span>
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                            </Button>
+                        </Link>
                     </div>
 
                     {/* Mobile Menu Button */}
