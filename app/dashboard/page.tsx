@@ -1,36 +1,18 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, LogOut, User } from "lucide-react";
+import { LayoutDashboard, User } from "lucide-react";
+import { UserSync } from "@/components/user-sync";
 
-export default function DashboardPage() {
-    const [user, setUser] = useState<any>(null);
-    const router = useRouter();
+export default async function DashboardPage() {
+    // Get the user from Clerk (Server Side)
+    const user = await currentUser();
 
-    useEffect(() => {
-        const checkUser = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) {
-                router.push("/login");
-            } else {
-                setUser(session.user);
-            }
-        };
-        checkUser();
-    }, [router]);
-
-    const handleLogout = async () => {
-        await supabase.auth.signOut();
-        router.push("/login");
-    };
-
-    if (!user) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Loading...</div>;
+    if (!user) return <div>Access Denied</div>;
 
     return (
         <div className="min-h-screen bg-background text-foreground">
+            <UserSync />
             <div className="border-b border-border/50 bg-card/50 backdrop-blur-md">
                 <div className="container mx-auto px-6 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -38,10 +20,9 @@ export default function DashboardPage() {
                         <span className="font-bold text-lg">Dashboard</span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <span className="text-sm text-muted-foreground">{user.email}</span>
-                        <Button variant="ghost" size="icon" onClick={handleLogout}>
-                            <LogOut size={18} />
-                        </Button>
+                        <span className="text-sm text-muted-foreground">Hello, {user.firstName || user.emailAddresses[0].emailAddress}</span>
+                        {/* Clerk's UserButton handles account management and logout */}
+                        <UserButton afterSignOutUrl="/" />
                     </div>
                 </div>
             </div>
@@ -62,8 +43,8 @@ export default function DashboardPage() {
                             <User size={24} />
                             <h2 className="text-xl font-bold text-foreground">Profile</h2>
                         </div>
-                        <p className="text-muted-foreground">Manage your account settings.</p>
-                        <Button variant="outline" className="mt-4 w-full">Edit Profile</Button>
+                        <p className="text-muted-foreground">Manage your account settings via Clerk.</p>
+                        <Button variant="outline" className="mt-4 w-full" disabled>Managed by Clerk</Button>
                     </div>
                 </div>
             </main>

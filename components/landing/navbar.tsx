@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useUser, UserButton } from "@clerk/nextjs";
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Sparkles } from "lucide-react";
 
 export function Navbar() {
+    const { isSignedIn } = useUser();
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -67,20 +69,34 @@ export function Navbar() {
                         ))}
                     </div>
 
+
                     <div className="hidden md:flex items-center gap-4 z-10">
-                        <Link href="/login">
-                            <Button variant="ghost" className="text-sm font-medium hover:bg-transparent hover:text-primary">
-                                Sign In
-                            </Button>
-                        </Link>
-                        <Link href="/login">
-                            <Button className="rounded-full px-6 bg-primary hover:bg-primary/90 text-primary-foreground border-0 shadow-lg shadow-indigo-500/25 relative overflow-hidden group">
-                                <span className="relative z-10 flex items-center gap-2">
-                                    Get Started <Sparkles size={14} />
-                                </span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
-                            </Button>
-                        </Link>
+                        {isSignedIn ? (
+                            <>
+                                <Link href="/dashboard">
+                                    <Button variant="ghost" className="text-sm font-medium hover:text-primary">
+                                        Dashboard
+                                    </Button>
+                                </Link>
+                                <UserButton afterSignOutUrl="/" />
+                            </>
+                        ) : (
+                            <>
+                                <Link href="/sign-in">
+                                    <Button variant="ghost" className="text-sm font-medium hover:bg-transparent hover:text-primary">
+                                        Sign In
+                                    </Button>
+                                </Link>
+                                <Link href="/sign-up">
+                                    <Button className="rounded-full px-6 bg-primary hover:bg-primary/90 text-primary-foreground border-0 shadow-lg shadow-indigo-500/25 relative overflow-hidden group">
+                                        <span className="relative z-10 flex items-center gap-2">
+                                            Get Started <Sparkles size={14} />
+                                        </span>
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                                    </Button>
+                                </Link>
+                            </>
+                        )}
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -114,12 +130,32 @@ export function Navbar() {
                                 </Link>
                             ))}
                             <div className="h-px bg-border my-2" />
-                            <Button variant="ghost" className="w-full justify-start">
-                                Sign In
-                            </Button>
-                            <Button className="w-full bg-primary text-primary-foreground">
-                                Get Started
-                            </Button>
+                            {isSignedIn ? (
+                                <>
+                                    <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start">
+                                            Dashboard
+                                        </Button>
+                                    </Link>
+                                    <div className="flex items-center gap-2 p-2">
+                                        <UserButton afterSignOutUrl="/" />
+                                        <span className="text-sm font-medium">Manage Account</span>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <Link href="/sign-in" onClick={() => setMobileMenuOpen(false)}>
+                                        <Button variant="ghost" className="w-full justify-start">
+                                            Sign In
+                                        </Button>
+                                    </Link>
+                                    <Link href="/sign-up" onClick={() => setMobileMenuOpen(false)}>
+                                        <Button className="w-full bg-primary text-primary-foreground">
+                                            Get Started
+                                        </Button>
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </motion.div>
                 )}

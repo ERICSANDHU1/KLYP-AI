@@ -1,10 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Play, Sparkles, ArrowRight, Search, Bell, User, LayoutTemplate, Calendar, Home, FolderOpen } from "lucide-react";
 
 export function Hero() {
+    const { isSignedIn } = useUser();
     return (
         <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden pt-20">
             {/* Background Elements */}
@@ -49,13 +52,15 @@ export function Hero() {
                     transition={{ duration: 0.5, delay: 0.3 }}
                     className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20"
                 >
-                    <Button
-                        size="lg"
-                        className="rounded-full px-8 h-12 text-base font-semibold bg-primary hover:bg-primary/90 shadow-lg shadow-indigo-500/25"
-                    >
-                        Start Creating for Free
-                        <ArrowRight className="ml-2 size-4" />
-                    </Button>
+                    <Link href={isSignedIn ? "/dashboard" : "/sign-up"}>
+                        <Button
+                            size="lg"
+                            className="rounded-full px-8 h-12 text-base font-semibold bg-primary hover:bg-primary/90 shadow-lg shadow-indigo-500/25"
+                        >
+                            {isSignedIn ? "Go to Dashboard" : "Start Creating for Free"}
+                            <ArrowRight className="ml-2 size-4" />
+                        </Button>
+                    </Link>
                     <Button
                         size="lg"
                         variant="outline"
