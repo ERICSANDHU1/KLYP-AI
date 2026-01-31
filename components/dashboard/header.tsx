@@ -1,17 +1,20 @@
 "use client";
 
 import { Bell, Search, Settings } from "lucide-react";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
+    const { user } = useUser();
     return (
         <header className="h-16 flex items-center justify-between px-8 bg-card/50 backdrop-blur-md border-b border-border/40 sticky top-0 z-30 ml-64">
             {/* Left: Breadcrumb/Welcome */}
             <div>
-                <h1 className="text-lg font-semibold text-foreground">Dashboard</h1>
-                <p className="text-xs text-muted-foreground">Overview</p>
+                <h1 className="text-lg font-semibold text-foreground">
+                    Hello, {user?.firstName || "Creator"} 👋
+                </h1>
+                <p className="text-xs text-muted-foreground">Here's your overview</p>
             </div>
 
             {/* Center: Search */}

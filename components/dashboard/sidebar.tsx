@@ -53,10 +53,12 @@ export function Sidebar() {
 
             {/* Primary CTA */}
             <div className="px-4 mb-6">
-                <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-lg shadow-indigo-500/25 border-t border-white/10">
-                    <Plus size={16} className="mr-2" />
-                    Create New AI Video
-                </Button>
+                <Link href="/dashboard/create">
+                    <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-lg shadow-indigo-500/25 border-t border-white/10">
+                        <Plus size={16} className="mr-2" />
+                        Create New Series
+                    </Button>
+                </Link>
             </div>
 
             <div className="px-4 mb-2">
