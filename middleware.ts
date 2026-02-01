@@ -1,9 +1,19 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-const isProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
+// Define public routes (accessible without authentication)
+// We include api/webhooks and api/inngest as they require open access (signature verification handles security)
+const isPublicRoute = createRouteMatcher([
+    '/',
+    '/sign-in(.*)',
+    '/sign-up(.*)',
+    '/api/webhooks(.*)',
+    '/api/inngest'
+]);
 
 export default clerkMiddleware(async (auth, req) => {
-    if (isProtectedRoute(req)) await auth.protect();
+    if (!isPublicRoute(req)) {
+        await auth.protect();
+    }
 });
 
 export const config = {
