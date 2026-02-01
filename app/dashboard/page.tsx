@@ -13,6 +13,7 @@ import { createClient } from "@supabase/supabase-js";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { SeriesCard, Series } from "@/components/dashboard/series-card";
+import { triggerVideoGeneration } from "@/app/actions/video-actions";
 
 const data = [
     { name: 'Mon', value: 400 },
@@ -134,13 +135,11 @@ export default function DashboardPage() {
     };
 
     const handleGenerate = async (series: Series) => {
-        toast.success("Triggering video generation...");
-        // Call your generation API here
-        try {
-            // Example: await generateVideo(series.id);
-        } catch (error) {
-            toast.error("Failed to trigger generation");
-        }
+        toast.promise(triggerVideoGeneration(series.id, user?.id || ""), {
+            loading: 'Triggering generation...',
+            success: 'Video generation started!',
+            error: 'Failed to trigger generation'
+        });
     };
 
     return (
